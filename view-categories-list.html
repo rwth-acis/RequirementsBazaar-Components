@@ -1,0 +1,480 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-ajax/iron-ajax.html">
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../paper-input/paper-input.html">
+<link rel="import" href="../paper-input/paper-textarea.html">
+<link rel="import" href="../paper-dialog/paper-dialog.html">
+<link rel="import" href="../paper-fab/paper-fab.html">
+<link rel="import" href="../paper-tooltip/paper-tooltip.html">
+<link rel="import" href="../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../paper-menu-button/paper-menu-button.html">
+<link rel="import" href="../paper-item/paper-item.html">
+<link rel="import" href="../paper-toast/paper-toast.html">
+<link rel="import" href="../iron-meta/iron-meta.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="../iron-icons/iron-icons.html">
+<link rel="import" href="../iron-icons/image-icons.html">
+<link rel="import" href="../web-animations-js/web-animations-next.min.html">
+<link rel="import" href="../neon-animation/animations/fade-in-animation.html">
+<link rel="import" href="../neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../paper-listbox/paper-listbox.html">
+<link rel="import" href="elements/categories-list.html">
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="reqbaz-icons.html">
+
+<dom-module id="view-categories-list">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+
+        padding: 15px;
+      }
+
+      paper-dropdown-menu {
+        --paper-input-container-input: {
+          font-size: x-large;
+        };
+      }
+
+      #clearInputButton {
+        padding: 0;
+        width: 24px;
+        height: 24px;
+      }
+
+      .toolbar {
+        @apply(--layout-horizontal);
+      }
+
+      .toolbar > paper-input {
+        @apply(--layout-flex);
+      }
+
+      .toolbarIcons {
+        @apply(--layout-horizontal);
+        @apply(--layout-end);
+      }
+
+      .toolbarIcons > paper-menu-button {
+        padding: 0;
+        padding-bottom: 5px;
+      }
+
+      #project-description {
+        word-break: break-all;
+      }
+
+      @media (max-width: 600px) {
+        :host {
+          padding: 0px;
+        }
+
+        .toolbar {
+          @apply(--layout-vertical);
+        }
+      }
+
+    </style>
+
+    <iron-ajax
+      id="postCategoryRequest"
+      loading="{{loading}}"
+      handle-as="json"
+      url="{{_apiBaseUrl}}categories"
+      content-type="application/json"
+      method="POST"
+      headers="[[authHeader]]"
+      on-response="_handlePostCategoryResponse"
+      on-error="_handlePostCategoryError"></iron-ajax>
+
+    <iron-ajax
+      id="editProjectRequest"
+      loading="{{loading}}"
+      handle-as="json"
+      content-type="application/json"
+      headers="[[authHeader]]"
+      on-response="_handleEditProjectResponse"
+      on-error="_handleEditProjectError"></iron-ajax>
+
+    <paper-card style="margin: 14px">
+      <div class="card-content">
+        <paper-menu-button style="position:absolute; top:2px; right:8px;" hidden="[[!authorized]]" on-iron-select="_handleCategoryMenuSelect">
+          <paper-icon-button icon="more-vert" slot="dropdown-trigger" alt="menu"></paper-icon-button>
+          <paper-listbox id="categoryInfoMenu" slot="dropdown-content">
+            <paper-item value="follow">Follow Project</paper-item>
+            <paper-item value="edit">Edit Project</paper-item>
+          </paper-listbox>
+        </paper-menu-button>
+
+        <div class="editHeader" hidden="[[_editMode]]">
+
+          <h2>[[project.name]]</h2>
+
+          <div id="project-description">[[project.description]]</div>
+
+        </div>
+
+        <div class="editForm" hidden="[[!_editMode]]">
+
+          <h2>Edit Project</h2>
+
+          <paper-input id="editName" class="editName" maxlength="50" label="Title" value="{{_editProjectName}}" auto-validate error-message="Please fill out this field." char-counter required></paper-input>
+          <paper-textarea id="editDescription" class="editDesc" label="Description" value="{{_editProjectDescription}}" auto-validate error-message="Please fill out this field." max-rows="5" required></paper-textarea>
+
+          <paper-button raised on-click="_handleCancelEditTap">Cancel</paper-button>
+          <paper-button raised on-click="_handleSaveEditTap" disabled="[[_editProjectSaveDisabled]]">Save</paper-button>
+
+        </div>
+
+        <paper-dropdown-menu label="Sorting"  style="display: inline-block">
+          <paper-listbox slot="dropdown-content" attr-for-selected="value" selected="{{_categoriesSorting}}">
+            <paper-item value="name">A-Z</paper-item>
+            <paper-item value="last_activity">Last Activity</paper-item>
+            <paper-item value="date">Creation Date</paper-item>
+            <paper-item value="follower">Followers</paper-item>
+            <paper-item value="requirement">Requirements</paper-item>
+          </paper-listbox>
+        </paper-dropdown-menu>
+
+        <div class="toolbarIcons"  style="display: inline-block">
+          <paper-menu-button>
+            <paper-icon-button id="sortDirectionMenuIcon"  slot="dropdown-trigger"></paper-icon-button>
+            <paper-listbox slot="dropdown-content" class="dropdown-content" attr-for-selected="value" selected="{{_categoriesSortDirection}}">
+              <paper-item value="+">Ascending</paper-item>
+              <paper-item value="-">Descending</paper-item>
+            </paper-listbox>
+          </paper-menu-button>
+        </div>
+
+        <paper-input id="searchInput" class="large" label="Filter the list by category name or description"
+                     value="{{_categoriesFilter}}" style="display: inline-block">
+          <iron-icon icon="search" slot="prefix"></iron-icon>
+          <paper-icon-button id="clearInputButton" slot="suffix" on-click="_handleClearInputTap"
+                             icon="clear" alt="clear" title="clear" tabindex="0">
+          </paper-icon-button>
+        </paper-input>
+        <paper-icon-button on-click="_handleCreateCategoryTap" id="fab" icon="add" hidden="[[!authorized]]"></paper-icon-button>
+        <paper-tooltip for="fab" position="left">Create Category</paper-tooltip>
+      </div>
+    </paper-card>
+
+    <categories-list id="categoriesList" project-id="[[projectId]]" filter-value="{{_categoriesFilter}}"
+                     sorting="[[_categoriesSorting]]" sort-direction="{{_categoriesSortDirection}}" view="{{view}}"
+                    category-id="{{categoryId}}" authorized="{{authorized}}" loading="{{loading}}"
+                     auth-token="{{authToken}}" current-user="{{currentUser}}">
+    </categories-list>
+
+
+    <!-- Dialog for creating a new category: -->
+
+    <paper-dialog id="createCategoryDialog" class="create-dialog" entry-animation="fade-in-animation"
+                  exit-animation="fade-out-animation" no-cancel-on-outside-click
+                  no-cancel-on-esc-key
+                  on-iron-overlay-closed="_handleCreateCategoryClosed" modal>
+      <h2>Create Category</h2>
+      <paper-input char-counter maxlength="50" label="Title" id="newCategoryName"
+                   value="{{_newCategoryName}}" required></paper-input>
+      <paper-textarea label="Description" id="newCategoryDescription"
+                      value="{{_newCategoryDescription}}" max-rows="5" required></paper-textarea>
+
+      <div class="buttons">
+        <paper-button dialog-dismiss>Cancel</paper-button>
+        <paper-button dialog-confirm autofocus disabled="[[_createCategoryDisabled]]">Save</paper-button>
+      </div>
+    </paper-dialog>
+
+    <!-- Dialog for confirming deletion of a category: -->
+    <paper-toast id="toast"></paper-toast>
+
+  </template>
+
+  <script>
+      class viewCategoriesList extends Polymer.Element {
+          static get is() { return 'view-categories-list'; }
+
+          static get properties() {
+              return {
+                  _apiBaseUrl: {
+                      type: String,
+                      value: 'https://requirements-bazaar.org/bazaar/'
+                  },
+                  _fileApiBaseUrl: {
+                      type: String,
+                      value: 'https://requirements-bazaar.org/fileservice/files/'
+                  },
+                  currentUser: {
+                      type: String
+                  },
+                  /**
+                   * Defines whether the user is logged in or not.
+                   */
+                  authorized: {
+                      type: Boolean,
+                      value: false
+                  },
+                  authHeader: {
+                      type: Array
+                  },
+                  authToken: {
+                      type: String,
+                      observer: '_authTokenChanged'
+                  },
+                  projectId: {
+                      type: Number,
+                      observer: '_projectIdChanged'
+                  },
+                  project: {
+                      type: Object
+                  },
+                  categoryId: {
+                      type: Number,
+                      notify: true
+                  },
+                  view: {
+                      type: String,
+                      notify: true
+                  },
+                  _editMode: {
+                      type: Boolean,
+                      value: false
+                  },
+                  _categoriesFilter: {
+                      type: String
+                  },
+                  _categoriesSorting: {
+                      type: String,
+                      value: 'name'
+                  },
+                  _categoriesSortDirection: {
+                      type: String,
+                      observer: '_categoriesSortDirectionChanged'
+                  },
+                  _editProjectName: {
+                      type: String,
+                      value: ''
+                  },
+                  _editProjectDescription: {
+                      type: String,
+                      value: ''
+                  },
+                  _editProjectSaveDisabled: {
+                      type: Boolean,
+                      computed: '_computeEditProjectSaveDisabled(_editProjectName, _editProjectDescription)'
+                  },
+                  _newCategoryName: {
+                      type: String,
+                      value: ''
+                  },
+                  _newCategoryDescription: {
+                      type: String,
+                      value: ''
+                  },
+                  _createCategoryDisabled: {
+                      type: Boolean,
+                      computed: '_computeCreateCategoryDisabled(_newCategoryName, _newCategoryDescription)'
+                  },
+                  /**
+                   * Whether any loading operation is currently active.
+                   */
+                  loading: {
+                      type: Boolean,
+                      notify: true
+                  }
+              };
+          }
+
+          constructor() {
+              super();
+          }
+
+          _authTokenChanged(token) {
+              this.authorized = true;
+              this.authHeader = {authorization: "Bearer " + token};
+          }
+
+          /**
+           * Resets the view options to the default values.
+           *
+           * @param newValue
+           * @private
+           */
+          _projectIdChanged(newValue) {
+              this._categoriesFilter = '';
+              this._categoriesSorting = 'name';
+          }
+
+          _handleCreateCategoryTap(e) {
+              var createDialog = this.shadowRoot.querySelector('#createCategoryDialog');
+              createDialog.open();
+          }
+
+          _handleCancelEditTap(e) {
+              this._editMode = false;
+          }
+
+          _handleSaveEditTap(e) {
+              var name = this._editProjectName;
+              var description = this._editProjectDescription;
+
+              var request = this.shadowRoot.querySelector('#editProjectRequest');
+              request.url = this._apiBaseUrl + 'projects/' + this.projectId;
+              request.body = JSON.stringify({
+                  "id": this.projectId,
+                  "name": name,
+                  "description": description
+              });
+              request.method = 'PUT';
+              request.generateRequest();
+
+              // update local project object
+              this.project.name = name;
+              this.project.description = description;
+              this.notifyPath('project.name', this.project.name);
+              this.notifyPath('project.description', this.project.description);
+
+              this._editMode = false;
+          }
+
+          _handleEditProjectResponse(e) {
+
+                  // 200 for PUT, 201 for POST
+                  if ((e.detail.status === 200) || (e.detail.status === 201)) {
+                      this.shadowRoot.querySelector('#toast').text = 'The project was successfully updated.';
+                  } else {
+                      this.shadowRoot.querySelector('#toast').text = 'Unfortunately the changes could not be saved. Please try again.';
+                      //TODO: reset the project object
+                  }
+                  this.shadowRoot.querySelector('#toast').open();
+          }
+
+          _handleEditProjectError(e) {
+              this.shadowRoot.querySelector('#toast').text = 'Unfortunately the changes could not be saved. Please try again.';
+              this.shadowRoot.querySelector('#toast').open();
+          }
+
+          /**
+           * Event handler for the category's paper-menu.
+           *
+           * @param e
+           * @private
+           */
+          _handleCategoryMenuSelect(e) {
+              // unselect the selected menu item
+              e.target.selected = null;
+              // get value of the paper-item
+              var selectedValue = e.detail.item.getAttribute('value');
+
+              if (selectedValue === 'follow') {
+                  this._toggleFollowProject();
+              } else {
+                  this._editProjectName = this.project.name;
+                  this._editProjectDescription = this.project.description;
+                  this._editMode = true;
+              }
+          }
+
+          _handleCreateCategoryClosed(e) {
+              if (e.detail.confirmed) {
+                  var request = this.shadowRoot.querySelector('#postCategoryRequest');
+                  request.body = JSON.stringify({
+                      "description": this._newCategoryDescription.trim(),
+                      "name": this._newCategoryName.trim(),
+                      "projectId": this.projectId
+                  });
+                  request.generateRequest();
+                  this.shadowRoot.querySelector('#newCategoryName').value = null;
+                  this.shadowRoot.querySelector('#newCategoryDescription').value = null;
+              }
+
+              // reset the form and validation error messages
+              this.shadowRoot.querySelector('#newCategoryName').required = false;
+              this.shadowRoot.querySelector('#newCategoryDescription').required = false;
+
+              this.shadowRoot.querySelector('#newCategoryName').value = null;
+              this.shadowRoot.querySelector('#newCategoryDescription').value = null;
+
+              this.shadowRoot.querySelector('#newCategoryName').required = true;
+              this.shadowRoot.querySelector('#newCategoryDescription').required = true;
+          }
+
+          /**
+           * Resets the value of the filter input field.
+           */
+          _handleClearInputTap(e) {
+              this._categoriesFilter = '';
+          }
+
+          _computeEditProjectSaveDisabled(editProjectName, editProjectDescription) {
+              return (editProjectName == null || editProjectDescription == null || editProjectName.trim() === '' || editProjectDescription.trim() === '');
+          }
+
+          _computeCreateCategoryDisabled(newCategoryName, newCategoryDescription) {
+              return (newCategoryName == null || newCategoryDescription == null || newCategoryName.trim() === '' || newCategoryDescription.trim() === '');
+          }
+
+          _handlePostCategoryResponse(e) {
+              this.shadowRoot.querySelector('#categoriesList').refresh();
+              this.shadowRoot.querySelector('#toast').text = 'Category created successfully!';
+              this.shadowRoot.querySelector('#toast').open();
+          }
+
+          _handlePostCategoryError(e) {
+              this.shadowRoot.querySelector('#toast').text = 'Some error occurred while creating the category!';
+              this.shadowRoot.querySelector('#toast').open();
+          }
+
+          _toggleFollowProject() {
+              var followers = this.project.followers;
+              var isFollower = this._isUserInArray(followers, this.currentUser);
+
+              var request = this.shadowRoot.querySelector('#editProjectRequest');
+              request.url = this._apiBaseUrl + 'projects/' + this.projectId + '/followers';
+
+              if (!isFollower) {
+                  // follow requirement
+                  request.method = 'POST';
+              } else {
+                  // unfollow requirement
+                  request.method = 'DELETE';
+              }
+
+              request.generateRequest();
+          }
+
+          /**
+           * Checks whether a user is in the users array. Compares the user's id.
+           *
+           * @param usersArray an array of user objects.
+           * @param user a user object.
+           * @returns {boolean} whether the user is in the array or not.
+           * @private
+           */
+          _isUserInArray(usersArray, user) {
+              if ((usersArray == null) || (user == null)) {
+                  return false;
+              } else {
+                  // check if the user's id is in the users array
+                  for (var index = 0; index < usersArray.length; ++index) {
+                      if (usersArray[index].id === user.id) {
+                          return true;
+                      }
+                  }
+
+                  return false;
+              }
+          }
+
+          _categoriesSortDirectionChanged(newValue) {
+              if (newValue === '+') {
+                  this.shadowRoot.querySelector('#sortDirectionMenuIcon').icon = 'reqbaz:sort-ascending';
+              } else {
+                  this.shadowRoot.querySelector('#sortDirectionMenuIcon').icon = 'reqbaz:sort-descending';
+              }
+          }
+      }
+
+      window.customElements.define(viewCategoriesList.is, viewCategoriesList);
+  </script>
+</dom-module>

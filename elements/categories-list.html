@@ -1,0 +1,195 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../iron-ajax/iron-ajax.html">
+<link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../paper-card/paper-card.html">
+
+<dom-module id="categories-list">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+
+      #categoriesList {
+        @apply(--layout-vertical);
+        @apply(--layout-center);
+      }
+
+      #categoriesList > a {
+        width: 100%;
+        max-width: 700px;
+        margin-bottom: 16px;
+        color: inherit;
+        text-decoration: none;
+      }
+
+      paper-card {
+        width: 100%;
+        max-width: 700px;
+        cursor: pointer;
+      }
+
+      paper-card:hover {
+        background-color: var(--list-hover-background-color);
+      }
+
+      .card-content {
+        word-break: break-all;
+      }
+    </style>
+
+    <iron-ajax
+      id="categoriesLoader"
+      loading="{{loading}}"
+      url="[[resourceURL]]"
+      headers="[[authHeader]]"
+      last-response="{{categories}}"
+      params="[[_computeCategoriesParams(sorting, sortDirection)]]"
+      auto></iron-ajax>
+
+    <div id="categoriesList">
+      <template is="dom-repeat" items="{{categories}}" filter="{{searchFilter(filterValue)}}">
+          <paper-card heading="[[item.name]]" on-click="_selectCategory">
+            <div class="card-content">[[item.description]]</div>
+          </paper-card>
+      </template>
+    </div>
+
+  </template>
+
+  <script>
+      class categoriesList extends Polymer.Element{
+          static get is() { return 'categories-list'; }
+
+          static get properties() {
+              return {
+                  _apiBaseUrl: {
+                      type: String,
+                      value: 'https://requirements-bazaar.org/bazaar/'
+                  },
+                  _fileApiBaseUrl: {
+                      type: String,
+                      value: 'https://requirements-bazaar.org/fileservice/files/'
+                  },
+                  currentUser: {
+                      type: String
+                  },
+                  /**
+                   * Defines whether the user is logged in or not.
+                   */
+                  authorized: {
+                      type: Boolean,
+                      value: false
+                  },
+                  authHeader: {
+                      type: Array
+                  },
+                  authToken: {
+                      type: String,
+                      observer: '_authTokenChanged'
+                  },
+                  projectId: {
+                      type: Number
+                  },
+                  resourceURL: {
+                      type: String,
+                      computed: '_computeResourceURL(projectId)'
+                  },
+                  categories: {
+                      type: Array,
+                      notify: true
+                  },
+                  view: {
+                      type: String,
+                      notify: true
+                  },
+                  categoryId: {
+                      type: Number,
+                      notify: true
+                  },
+                  filterValue: {
+                      type: String,
+                      value: ''
+                  },
+                  /**
+                   * The sorting parameter of categories, either `name`, `date`, `last_activity`, `requirement` or `follower`.
+                   */
+                  sorting: {
+                      type: String,
+                      observer: '_sortingChanged'
+                  },
+                  sortDirection: {
+                      type: String,
+                      value: '+',
+                      notify: true,
+                      reflectToAttribute: true
+                  },
+                  /**
+                   * Whether any loading operation is currently active.
+                   */
+                  loading: {
+                      type: Boolean,
+                      notify: true
+                  }
+              };
+          }
+
+          constructor() {
+              super();
+
+          }
+
+          _authTokenChanged(token) {
+              this.authorized = true;
+              this.authHeader = {authorization: "Bearer " + token};
+          }
+
+          _computeResourceURL(projectId) {
+              return this._apiBaseUrl + 'projects/' + projectId + '/categories/';
+          }
+
+          _computeCategoriesParams(sorting, sortDirection) {
+              return {
+                  page: 0,
+                  per_page: 150,
+                  sort: sortDirection + sorting
+              };
+          }
+
+          refresh() {
+              this.shadowRoot.querySelector('#categoriesLoader').generateRequest();
+          }
+
+          // thanks goes to http://jcrowther.io/2015/06/09/polymer-dom-repeat-filtering-and-sorting/ for the great help
+          /**
+           * Returns true either if the filter expression is empty, or if the filter expression is included in
+           * either the project's name or description.
+           *
+           * @param val
+           * @returns {Function}
+           */
+          searchFilter(filterValue) {
+              return function (item) {
+                  return (item.name && ~item.name.toLowerCase().indexOf(filterValue.toLowerCase())) || (item.description && ~item.description.toLowerCase().indexOf(filterValue.toLowerCase()));
+              };
+          }
+
+          _sortingChanged(newValue) {
+              if (['date', 'last_activity', 'requirement', 'follower'].indexOf(newValue) >= 0) {
+                  this.sortDirection = '-';
+              } else {
+                  this.sortDirection = '+';
+              }
+          }
+
+          _selectCategory(e){
+              this.categoryId = e.model.item.id;
+              this.category = e.model.item;
+              this.view = 'requirements';
+          }
+      }
+
+      window.customElements.define(categoriesList.is, categoriesList);
+  </script>
+
+</dom-module>

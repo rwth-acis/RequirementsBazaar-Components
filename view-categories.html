@@ -1,0 +1,72 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../polymer/lib/utils/import-href.html">
+<link rel="import" href="../iron-pages/iron-pages.html">
+<link rel="import" href="view-categories-list.html">
+<link rel="import" href="view-requirements.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="view-categories">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+    <iron-pages selected="[[view]]"
+                attr-for-selected="name" selected-attribute="visible" role="main"
+                fallback-selection="404">
+      <view-categories-list name="categories-list" project-id="[[projectId]]" project="{{project}}"
+                            view="{{view}}" category-id="{{categoryId}}" authorized="{{authorized}}"
+                            auth-token="{{authToken}}"  current-user="{{currentUser}}" loading="{{loading}}">
+      </view-categories-list>
+      <view-requirements name="requirements" id="requirementsView" project-id="[[projectId]]" project="{{project}}"
+                         category-id="{{categoryId}}" view="{{view}}" loading="{{loading}}"
+                         authorized="{{authorized}}" auth-token="{{authToken}}" current-user="{{currentUser}}">
+      </view-requirements>
+      <view-404 name="404"></view-404>
+    </iron-pages>
+
+
+  </template>
+
+  <script>
+      class viewCategories extends Polymer.Element {
+          static get is() { return 'view-categories'; }
+
+          static get properties() {
+              return {
+                  view: {
+                      type: String,
+                      notify: true,
+                      reflectToAttribute: true
+                  },
+                  projectId: {
+                      type: Number
+                  },
+                  project: {
+                      type: Object,
+                      notify: true
+                  },
+                  categoryId: {
+                      type: Number,
+                      notify: true
+                  },
+                  /**
+                   * Whether any loading operation is currently active.
+                   */
+                  loading: {
+                      type: Boolean,
+                      notify: true
+                  }
+              };
+          }
+
+          constructor() {
+              super();
+          }
+      }
+
+      window.customElements.define(viewCategories.is, viewCategories);
+  </script>
+</dom-module>

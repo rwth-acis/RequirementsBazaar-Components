@@ -1,0 +1,8 @@
+{
+  "lint": {
+    "rules": [
+      "polymer-2"
+    ]
+  },
+  "addServiceWorker": true
+}

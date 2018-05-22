@@ -1,0 +1,182 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-image/iron-image.html">
+<link rel="import" href="../iron-collapse/iron-collapse.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html">
+
+<dom-module id="file-gallery">
+  <template>
+    <style is="custom-style">
+      #expandedImage {
+        width: 100%;
+      }
+
+      .imageIcon {
+        width:50px;
+        height:50px;
+        --iron-image-placeholder: {
+          background-color: lightgray;
+        };
+      }
+    </style>
+
+    <iron-ajax id="attachmentsRequest"
+               loading="{{loading}}"
+               url="{{_resourceURL}}"
+               headers="[[authHeader]]"
+               last-response="{{attachments}}"
+               params='{"page":"0", "per_page":"150"}'></iron-ajax>
+
+    <!-- Show thumbnails of the images, added dynamically: -->
+
+    <template is="dom-repeat" items="[[attachments]]">
+      <iron-image class="imageIcon"
+                  src="[[item.fileUrl]]"
+                  alt="[[item.name]]"
+                  sizing="cover"
+                  on-click="_handleImageToggle"
+                  preload
+                  fade></iron-image>
+    </template>
+
+    <!-- show images in the list view -->
+    <iron-collapse id="imageCollapse" no-animation>
+      <img id="expandedImage">
+    </iron-collapse>
+
+
+    <!-- Dialog for showing the image on small layouts: -->
+
+    <paper-dialog id="imgPopupDialog" with-backdrop entry-animation="fade-in-animation" exit-animation="fade-out-animation">
+      <h2 id="imgName"></h2>
+      <div>
+        <img id="popupImg" height="500">
+      </div>
+    </paper-dialog>
+
+  </template>
+
+  <script>
+      class fileGallery extends Polymer.Element{
+          static get is() { return 'file-gallery'; }
+
+          static get properties() {
+              return {
+                  _apiBaseUrl: {
+                      type: String,
+                      value: 'https://requirements-bazaar.org/bazaar/'
+                  },
+                  _fileApiBaseUrl: {
+                      type: String,
+                      value: 'https://requirements-bazaar.org/fileservice/files/'
+                  },
+                  currentUser: {
+                      type: String
+                  },
+                  /**
+                   * Defines whether the user is logged in or not.
+                   */
+                  authorized: {
+                      type: Boolean,
+                      value: false
+                  },
+                  authHeader: {
+                      type: Array
+                  },
+                  authToken: {
+                      type: String,
+                      observer: '_authTokenChanged'
+                  },
+                  project: {
+                      type: Object
+                  },
+                  /**
+                   * The id of the requirement to show attachments for.
+                   */
+                  requirementId: {
+                      type: Number,
+                      observer: '_requirementIdChanged'
+                  },
+                  _resourceURL: {
+                      type: String,
+                      computed: '_computeResourceURL(requirementId)'
+                  },
+                  /**
+                   * All retrieved attachments.
+                   */
+                  attachments: {
+                      type: Array,
+                      notify: true
+                  },
+                  authorized: {
+                      type: Boolean
+                  },
+                  /**
+                   * Whether any loading operation is currently active.
+                   */
+                  loading: {
+                      type: Boolean,
+                      notify: true
+                  }
+              };
+          }
+
+          constructor() {
+              super();
+          }
+
+          _authTokenChanged(token) {
+              this.authorized = true;
+              this.authHeader = {authorization: "Bearer " + token};
+          }
+          /**
+           * Computes the URL for sending a GET request to the attachments for the specified requirement.
+           *
+           * @param requirementId
+           * @returns {string}
+           */
+          _computeResourceURL(requirementId) {
+              return this._apiBaseUrl + 'requirements/' + requirementId + '/attachments/';
+          }
+
+          /**
+           * Generates request for loading comments.
+           */
+          refresh() {
+              this.shadowRoot.querySelector('#attachmentsRequest').generateRequest();
+          }
+
+          /**
+           * Toggles the collapsible element to show the full image. Triggered by clicking on an image icon.
+           *
+           * @param e
+           */
+          _handleImageToggle(e) {
+              var imageUrl = e.model.item.fileUrl;
+              if (this.shadowRoot.querySelector('#imageCollapse').opened) {
+                  if (this.shadowRoot.querySelector('#expandedImage').src === imageUrl) {
+                      // image was already shown, close the collapsible
+                      this.shadowRoot.querySelector('#imageCollapse').hide();
+                  } else {
+                      // load current image
+                      this.shadowRoot.querySelector('#expandedImage').src = imageUrl;
+                  }
+              } else {
+                  // the collapsible is still closed, load image and open collapsible
+                  this.shadowRoot.querySelector('#expandedImage').src = imageUrl;
+                  this.shadowRoot.querySelector('#imageCollapse').show();
+              }
+
+              let event = new CustomEvent('resize', {bubbles: true, composed: true});
+              this.dispatchEvent(event);
+          }
+
+          _requirementIdChanged(newValue) {
+              if (this.shadowRoot.querySelector('#imageCollapse').opened) {
+                  this.shadowRoot.querySelector('#imageCollapse').hide();
+              }
+          }
+      }
+      window.customElements.define(fileGallery.is, fileGallery);
+  </script>
+
+</dom-module>
