@@ -15,6 +15,7 @@ export class ReqbazRequirementsGrid extends LitElement {
         width: 100%;
         max-width: 1279px;
         justify-content: center;
+        margin: 0 24px;
       }
 
       a {
