@@ -51,7 +51,6 @@ export class ReqbazRequirementsGrid extends LitElement {
         text-overflow: ellipsis;
         -webkit-line-clamp: 3;
       }
-
     `;
   }
 
@@ -64,21 +63,22 @@ export class ReqbazRequirementsGrid extends LitElement {
        */
       baseUrl: { type: String },
       category: { type: Number },
+      perPage: { type: Number },
+      _intersectionObserver: { type: Object },
+      _page: { type: Number },
+      _isSentinelVisible: { type: Boolean },
     };
   }
 
   constructor() {
     super();
     this.baseUrl = 'https://requirements-bazaar.org/bazaar/';
+    this.requirements = [];
+    this.perPage = 10;
+    this._isSentinelVisible = true;
   }
   
   render() {
-    if (this.loading) {
-      return html`
-        <p>Loading Requirements...</p>
-      `;
-    }
-
     return html`
       <div id="container">
         <masonry-layout>
@@ -91,6 +91,7 @@ export class ReqbazRequirementsGrid extends LitElement {
             </a>
           `)}
         </masonry-layout>
+        <div id="sentinel"></div>
       </div>
     `;
   }
@@ -98,19 +99,48 @@ export class ReqbazRequirementsGrid extends LitElement {
   connectedCallback() {
     super.connectedCallback();
 
-    if (!this.requirements) {
-      this.fetchRequirements();
-    }
+    // initialize page so fetching can start
+    this._page = 0;
   }
-
+  
   async fetchRequirements() {
     this.loading = true;
 
-    const url = `${this.baseUrl}categories/${this.category}/requirements?page=0&per_page=200&sort=-date&state=open&search=`
+    const url = `${this.baseUrl}categories/${this.category}/requirements?page=${this._page}&per_page=${this.perPage}&sort=-date&state=open&search=`
     const response = await fetch(url);
     const jsonResponse = await response.json();
-    this.requirements = jsonResponse;
+    if (!this.requirements) {
+      this.requirements = [];
+    }
+    Array.prototype.push.apply(this.requirements, jsonResponse);
     this.loading = false;
+    if ((jsonResponse.length > 0) && this._isSentinelVisible) {
+      this._page += 1;
+    }
+  }
+
+  firstUpdated() {
+    const sentinel = this.shadowRoot.getElementById('sentinel');
+    this._intersectionObserver = new IntersectionObserver(this._handleIntersection.bind(this), {
+      rootMargin: '0px 0px 400px 0px',
+    });
+    this._intersectionObserver.observe(sentinel);
+  }
+
+  updated(changedProperties) {
+    changedProperties.forEach((oldValue, propName) => {
+      if (propName === '_page') {
+        this.fetchRequirements();
+      }
+    });
+  }
+
+  _handleIntersection(intersections) {
+    const intersection = intersections[0];
+    this._isSentinelVisible = intersection.isIntersecting;
+    if (intersection.isIntersecting) {
+      this._page += 1;
+    }
   }
 
 }
