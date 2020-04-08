@@ -1,25 +1,25 @@
 {
   "name": "reqbaz-components",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Requirements Bazaar Web Components",
   "author": "István Koren",
   "license": "MIT",
   "main": "index.js",
   "module": "index.js",
   "repository": {
-		"type": "git",
-		"url": "git+https://github.com/rwth-acis/RequirementsBazaar-Components.git"
+    "type": "git",
+    "url": "git+https://github.com/rwth-acis/RequirementsBazaar-Components.git"
   },
   "keywords": [
     "Requirements Bazaar",
     "reqbaz",
-		"custom",
-		"elements",
-		"web",
-		"component",
-		"custom element",
-		"web component"
-	],
+    "custom",
+    "elements",
+    "web",
+    "component",
+    "custom element",
+    "web component"
+  ],
   "scripts": {
     "start": "es-dev-server --app-index demo/index.html --node-resolve --open --watch",
     "lint:eslint": "eslint --ext .js,.html . --ignore-path .gitignore",
