@@ -1,7 +1,8 @@
 import { html, css, LitElement } from 'lit-element';
 import '@appnest/masonry-layout';
+import '../reqbaz-project-card.js';
 
-export class ReqbazRequirementsGrid extends LitElement {
+export class ReqbazProjectsGrid extends LitElement {
   static get styles() {
     return css`
       :host {
@@ -18,37 +19,21 @@ export class ReqbazRequirementsGrid extends LitElement {
       }
 
       a {
+        width: 300px;
         color: inherit;
         background-color: inherit;
         text-decoration: inherit;
       }
 
-      .card {
+      reqbaz-project-card {
         flex-direction: column;
-        border: 1px solid white;
         box-sizing: border-box;
-        padding: 15px 10px;
         background-color: white;
         font-family: 'Roboto';
       }
 
-      .card:hover {
+      reqbaz-project-card:hover {
         border: 1px solid #97a0a4;
-      }
-
-      .card .name {
-        width: 100%;
-        font-weight: 500;
-        font-size: 18px;
-      }
-
-      .card .description {
-        width: 100%;
-        margin-top: 10px;
-        font-size: 15px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        -webkit-line-clamp: 3;
       }
     `;
   }
@@ -56,12 +41,11 @@ export class ReqbazRequirementsGrid extends LitElement {
   static get properties() {
     return {
       loading: { type: Boolean },
-      requirements: { type: Array },
+      projects: { type: Array },
       /**
        * Base URL of the Requirements Bazaar instance to work with.
        */
       baseUrl: { type: String },
-      category: { type: Number },
       perPage: { type: Number },
       _intersectionObserver: { type: Object },
       _page: { type: Number },
@@ -72,7 +56,7 @@ export class ReqbazRequirementsGrid extends LitElement {
   constructor() {
     super();
     this.baseUrl = 'https://requirements-bazaar.org/bazaar/';
-    this.requirements = [];
+    this.projects = [];
     this.perPage = 10;
     this._isSentinelVisible = true;
   }
@@ -81,16 +65,17 @@ export class ReqbazRequirementsGrid extends LitElement {
     return html`
       <div id="container">
         <masonry-layout>
-          ${this.requirements.map(
-            requirement => html`
-              <a
-                href="https://requirements-bazaar.org/projects/2/categories/2/requirements/${requirement.id}"
-                target="_blank"
-              >
-                <div class="card">
-                  <div class="name">${requirement.name}</div>
-                  <div class="description">${requirement.description}</div>
-                </div>
+          ${this.projects.map(
+            project => html`
+              <a href="https://requirements-bazaar.org/projects/${project.id}" target="_blank">
+                <reqbaz-project-card
+                  name=${project.name}
+                  description=${project.description}
+                  numberOfFollowers=${project.numberOfFollowers}
+                  numberOfCategories=${project.numberOfCategories}
+                  numberOfRequirements=${project.numberOfRequirements}
+                >
+                </reqbaz-project-card>
               </a>
             `,
           )}
@@ -107,16 +92,16 @@ export class ReqbazRequirementsGrid extends LitElement {
     this._page = 0;
   }
 
-  async fetchRequirements() {
+  async fetchProjects() {
     this.loading = true;
 
-    const url = `${this.baseUrl}categories/${this.category}/requirements?page=${this._page}&per_page=${this.perPage}&sort=-date&state=open&search=`;
+    const url = `${this.baseUrl}projects?page=${this._page}&per_page=${this.perPage}&sort=-date&state=open&search=`;
     const response = await fetch(url);
     const jsonResponse = await response.json();
-    if (!this.requirements) {
-      this.requirements = [];
+    if (!this.projects) {
+      this.projects = [];
     }
-    Array.prototype.push.apply(this.requirements, jsonResponse);
+    Array.prototype.push.apply(this.projects, jsonResponse);
     this.loading = false;
     if (jsonResponse.length > 0 && this._isSentinelVisible) {
       this._page += 1;
@@ -134,7 +119,7 @@ export class ReqbazRequirementsGrid extends LitElement {
   updated(changedProperties) {
     changedProperties.forEach((oldValue, propName) => {
       if (propName === '_page') {
-        this.fetchRequirements();
+        this.fetchProjects();
       }
     });
   }
