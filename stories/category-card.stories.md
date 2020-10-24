@@ -1,15 +1,15 @@
 ```js script
 import { html } from '@open-wc/demoing-storybook';
-import '../reqbaz-project-card.js';
+import '../reqbaz-category-card.js';
 
 export default {
-  title: 'ReqbazProjectCard',
-  component: 'reqbaz-project-card',
+  title: 'ReqbazCategoryCard',
+  component: 'reqbaz-category-card',
   options: { selectedPanel: "storybookjs/knobs/panel" },
 };
 ```
 
-# Reqbaz Project Card
+# Reqbaz Category Card
 
 A component for...
 
@@ -28,12 +28,12 @@ npm i reqbaz-components
 ```
 
 ```js
-import 'reqbaz-project-card/reqbaz-project-card.js';
+import 'reqbaz-category-card/reqbaz-category-card.js';
 ```
 
 ```js preview-story
 export const Simple = () => html`
-  <reqbaz-project-card></reqbaz-project-card>
+  <reqbaz-category-card></reqbaz-category-card>
 `;
 ```
 
@@ -43,6 +43,6 @@ export const Simple = () => html`
 
 ```js preview-story
 export const CustomTitle = () => html`
-  <reqbaz-project-card title="Hello World"></reqbaz-project-card>
+  <reqbaz-category-card></reqbaz-category-card>
 `;
 ```
