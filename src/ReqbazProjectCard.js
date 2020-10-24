@@ -29,9 +29,24 @@ export class ReqbazProjectCard extends LitElement {
       }
 
       #description {
+        position: relative;
+        display: inline-block;
+        max-height: 280px;
         margin: 5px 0;
         font-size: 16px;
         color: #757575;
+        overflow-y: hidden;
+        text-overflow: clip ellipsis;
+      }
+
+      #description:before {
+        position: absolute;
+        content: '';
+        width: 100%;
+        height: 100%;
+        left: 0;
+        bottom: 0px;
+        background: linear-gradient(transparent 120px, white);
       }
 
       #actions {
