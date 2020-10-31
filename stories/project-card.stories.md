@@ -1,10 +1,11 @@
 ```js script
-import { html } from '@open-wc/demoing-storybook';
+import { html, withKnobs, withWebComponentsKnobs } from '@open-wc/demoing-storybook';
 import '../reqbaz-project-card.js';
 
 export default {
   title: 'ReqbazProjectCard',
   component: 'reqbaz-project-card',
+  decorators: [withKnobs, withWebComponentsKnobs],
   options: { selectedPanel: "storybookjs/knobs/panel" },
 };
 ```
@@ -32,17 +33,11 @@ import 'reqbaz-project-card/reqbaz-project-card.js';
 ```
 
 ```js preview-story
-export const Simple = () => html`
+export const Standard = () => html`
   <reqbaz-project-card></reqbaz-project-card>
 `;
 ```
 
-## Variations
+## API
 
-###### Custom Title
-
-```js preview-story
-export const CustomTitle = () => html`
-  <reqbaz-project-card title="Hello World"></reqbaz-project-card>
-`;
-```
+<sb-props of="reqbaz-project-card"></sb-props>

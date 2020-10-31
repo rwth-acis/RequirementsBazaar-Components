@@ -1,30 +1,173 @@
 {
-  "version": 2,
+  "version": "experimental",
   "tags": [
     {
-      "name": "reqbaz-components",
-      "description": "A collection of components for Requirements Bazaar",
-      "properties": [
+      "name": "reqbaz-categories-list",
+      "path": "./src/ReqbazCategoriesList.js",
+      "description": "Here is a description of my web component.",
+      "attributes": [
         {
-          "name": "title",
-          "type": "String",
-          "description": "The title of your component",
-          "default": "Hey there"
+          "name": "baseUrl",
+          "description": "Base URL of the Requirements Bazaar instance to work with.",
+          "type": "string",
+          "default": "\"https://requirements-bazaar.org/bazaar/\""
         },
         {
-          "name": "counter",
-          "type": "Number",
-          "description": "An action counter",
-          "default": 0
+          "name": "projectId",
+          "type": "number",
+          "default": "2"
+        },
+        {
+          "name": "categories",
+          "type": "array",
+          "default": "[]"
         }
       ],
-      "events": [],
-      "slots": [],
-      "cssProperties": [
+      "properties": [
         {
-          "name": "--reqbaz-requirements-grid-text-color",
-          "description": "Main Text Color",
-          "type": "Color"
+          "name": "baseUrl",
+          "attribute": "baseUrl",
+          "description": "Base URL of the Requirements Bazaar instance to work with.",
+          "type": "string",
+          "default": "\"https://requirements-bazaar.org/bazaar/\""
+        },
+        {
+          "name": "projectId",
+          "attribute": "projectId",
+          "type": "number",
+          "default": "2"
+        },
+        {
+          "name": "categories",
+          "attribute": "categories",
+          "type": "array",
+          "default": "[]"
+        }
+      ]
+    },
+    {
+      "name": "reqbaz-project-card",
+      "path": "./src/ReqbazProjectCard.js",
+      "description": "Here is a description of my web component.",
+      "attributes": [
+        {
+          "name": "projectId",
+          "type": "number"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "default": "\"Requirements Bazaar\""
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "\"This project is about Requirements Bazaar. We are happy for your feedback, suggestions and ideas. We invite you to help us to improve Requirements Bazaar.\""
+        },
+        {
+          "name": "numberOfFollowers",
+          "type": "number",
+          "default": "0"
+        },
+        {
+          "name": "numberOfCategories",
+          "type": "number",
+          "default": "0"
+        },
+        {
+          "name": "numberOfRequirements",
+          "type": "number",
+          "default": "0"
+        }
+      ],
+      "properties": [
+        {
+          "name": "projectId",
+          "attribute": "projectId",
+          "type": "number"
+        },
+        {
+          "name": "name",
+          "attribute": "name",
+          "type": "string",
+          "default": "\"Requirements Bazaar\""
+        },
+        {
+          "name": "description",
+          "attribute": "description",
+          "type": "string",
+          "default": "\"This project is about Requirements Bazaar. We are happy for your feedback, suggestions and ideas. We invite you to help us to improve Requirements Bazaar.\""
+        },
+        {
+          "name": "numberOfFollowers",
+          "attribute": "numberOfFollowers",
+          "type": "number",
+          "default": "0"
+        },
+        {
+          "name": "numberOfCategories",
+          "attribute": "numberOfCategories",
+          "type": "number",
+          "default": "0"
+        },
+        {
+          "name": "numberOfRequirements",
+          "attribute": "numberOfRequirements",
+          "type": "number",
+          "default": "0"
+        }
+      ]
+    },
+    {
+      "name": "reqbaz-projects-grid",
+      "path": "./src/ReqbazProjectsGrid.js",
+      "description": "Here is a description of my web component.",
+      "attributes": [
+        {
+          "name": "loading",
+          "type": "boolean"
+        },
+        {
+          "name": "baseUrl",
+          "description": "Base URL of the Requirements Bazaar instance to work with.",
+          "type": "string",
+          "default": "\"https://requirements-bazaar.org/bazaar/\""
+        },
+        {
+          "name": "projects",
+          "type": "array",
+          "default": "[]"
+        },
+        {
+          "name": "perPage",
+          "type": "number",
+          "default": "10"
+        }
+      ],
+      "properties": [
+        {
+          "name": "loading",
+          "attribute": "loading",
+          "type": "boolean"
+        },
+        {
+          "name": "baseUrl",
+          "attribute": "baseUrl",
+          "description": "Base URL of the Requirements Bazaar instance to work with.",
+          "type": "string",
+          "default": "\"https://requirements-bazaar.org/bazaar/\""
+        },
+        {
+          "name": "projects",
+          "attribute": "projects",
+          "type": "array",
+          "default": "[]"
+        },
+        {
+          "name": "perPage",
+          "attribute": "perPage",
+          "type": "number",
+          "default": "10"
         }
       ]
     }

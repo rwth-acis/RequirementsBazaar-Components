@@ -31,7 +31,8 @@
     "test": "karma start --coverage",
     "test:watch": "karma start --auto-watch=true --single-run=false",
     "storybook": "start-storybook",
-    "storybook:build": "build-storybook"
+    "storybook:build": "build-storybook",
+    "wca": "wca analyze src --format json --outFile custom-elements.json"
   },
   "dependencies": {
     "@appnest/masonry-layout": "^2.0.8",
@@ -48,7 +49,8 @@
     "@web/dev-server": "^0.0.14",
     "eslint": "^6.1.0",
     "husky": "^1.0.0",
-    "lint-staged": "^8.0.0"
+    "lint-staged": "^8.0.0",
+    "web-component-analyzer": "^1.1.6"
   },
   "eslintConfig": {
     "extends": [

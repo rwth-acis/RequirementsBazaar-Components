@@ -2,6 +2,12 @@ import { html, css, LitElement } from 'lit-element';
 
 import { followersIcon, categoriesIcon, requirementsIcon } from './reqbaz-icons.js';
 
+/**
+ * Here is a description of my web component.
+ *
+ * @element reqbaz-project-card
+ *
+ */
 export class ReqbazProjectCard extends LitElement {
   static get styles() {
     return css`

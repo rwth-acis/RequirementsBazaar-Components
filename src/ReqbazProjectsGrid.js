@@ -2,6 +2,12 @@ import { html, css, LitElement } from 'lit-element';
 import '@appnest/masonry-layout';
 import '../reqbaz-project-card.js';
 
+/**
+ * Here is a description of my web component.
+ *
+ * @element reqbaz-projects-grid
+ *
+ */
 export class ReqbazProjectsGrid extends LitElement {
   static get styles() {
     return css`

@@ -1,16 +1,16 @@
 ```js script
 import { html, withKnobs, withWebComponentsKnobs } from '@open-wc/demoing-storybook';
-import '../reqbaz-projects-grid.js';
+import '../reqbaz-categories-list.js';
 
 export default {
-  title: 'ReqbazProjectsGrid',
-  component: 'reqbaz-projects-grid',
+  title: 'ReqbazCategoriesList',
+  component: 'reqbaz-categories-list',
   decorators: [withKnobs, withWebComponentsKnobs],
   options: { selectedPanel: "storybookjs/knobs/panel" },
 };
 ```
 
-# ReqbazProjectsGrid
+# Reqbaz Categories List
 
 A component for...
 
@@ -25,21 +25,19 @@ A component for...
 ### Installation
 
 ```bash
-yarn add test-component-four
+npm i reqbaz-components
 ```
 
 ```js
-import 'reqbaz-projects-grid/reqbaz-projects-grid.js';
+import 'reqbaz-categories-list/reqbaz-categories-list.js';
 ```
 
 ```js preview-story
 export const Standard = () => html`
-<div style="height:700px;">
-  <reqbaz-projects-grid></reqbaz-projects-grid>
-</div>
+  <reqbaz-categories-list></reqbaz-categories-list>
 `;
 ```
 
 ## API
 
-<sb-props of="reqbaz-projects-grid"></sb-props>
+<sb-props of="reqbaz-categories-list"></sb-props>
