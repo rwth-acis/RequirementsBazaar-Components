@@ -32,17 +32,7 @@ import 'reqbaz-requirements-grid/reqbaz-requirements-grid.js';
 ```
 
 ```js preview-story
-export const Simple = () => html`
+export const Standard = () => html`
   <reqbaz-requirement-card></reqbaz-requirement-card>
-`;
-```
-
-## Variations
-
-###### Custom Title
-
-```js preview-story
-export const CustomTitle = () => html`
-  <reqbaz-requirement-card title="Hello World"></reqbaz-requirement-card>
 `;
 ```
