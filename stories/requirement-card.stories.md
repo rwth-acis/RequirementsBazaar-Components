@@ -1,10 +1,11 @@
 ```js script
-import { html } from '@open-wc/demoing-storybook';
+import { html, withKnobs, withWebComponentsKnobs } from '@open-wc/demoing-storybook';
 import '../reqbaz-requirement-card.js';
 
 export default {
   title: 'ReqbazRequirementCard',
   component: 'reqbaz-requirement-card',
+  decorators: [withKnobs, withWebComponentsKnobs],
   options: { selectedPanel: "storybookjs/knobs/panel" },
 };
 ```
@@ -24,7 +25,7 @@ A component for...
 ### Installation
 
 ```bash
-yarn add test-component-four
+npm i reqbaz-components
 ```
 
 ```js
@@ -36,3 +37,7 @@ export const Standard = () => html`
   <reqbaz-requirement-card></reqbaz-requirement-card>
 `;
 ```
+
+## API
+
+<sb-props of="reqbaz-requirement-card"></sb-props>

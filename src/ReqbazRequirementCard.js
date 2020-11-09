@@ -1,7 +1,13 @@
 import { html, css, LitElement } from 'lit-element';
-
+import '../reqbaz-comments-thread.js';
 import { starIcon } from './reqbaz-icons.js';
 
+/**
+ * Here is a description of my web component.
+ *
+ * @element reqbaz-requirement-card
+ *
+ */
 export class ReqbazRequirementCard extends LitElement {
   static get styles() {
     return css`
@@ -91,6 +97,7 @@ export class ReqbazRequirementCard extends LitElement {
         <div id="comments">
           <div class="subtitle">Comments</div>
           No comments yet...
+          <reqbaz-comments-thread requirementId=${this.requirementId}></reqbaz-comments-thread>
         </div>
       </div>
     `;

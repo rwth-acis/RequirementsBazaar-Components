@@ -46,6 +46,50 @@
       ]
     },
     {
+      "name": "reqbaz-comments-thread",
+      "path": "./src/ReqbazCommentsThread.js",
+      "description": "Here is a description of my web component.",
+      "attributes": [
+        {
+          "name": "baseUrl",
+          "description": "Base URL of the Requirements Bazaar instance to work with.",
+          "type": "string",
+          "default": "\"https://requirements-bazaar.org/bazaar/\""
+        },
+        {
+          "name": "requirementId",
+          "type": "number",
+          "default": "2338"
+        },
+        {
+          "name": "comments",
+          "type": "array",
+          "default": "[]"
+        }
+      ],
+      "properties": [
+        {
+          "name": "baseUrl",
+          "attribute": "baseUrl",
+          "description": "Base URL of the Requirements Bazaar instance to work with.",
+          "type": "string",
+          "default": "\"https://requirements-bazaar.org/bazaar/\""
+        },
+        {
+          "name": "requirementId",
+          "attribute": "requirementId",
+          "type": "number",
+          "default": "2338"
+        },
+        {
+          "name": "comments",
+          "attribute": "comments",
+          "type": "array",
+          "default": "[]"
+        }
+      ]
+    },
+    {
       "name": "reqbaz-project-card",
       "path": "./src/ReqbazProjectCard.js",
       "description": "Here is a description of my web component.",
@@ -168,6 +212,92 @@
           "attribute": "perPage",
           "type": "number",
           "default": "10"
+        }
+      ]
+    },
+    {
+      "name": "reqbaz-requirement-card",
+      "path": "./src/ReqbazRequirementCard.js",
+      "description": "Here is a description of my web component.",
+      "attributes": [
+        {
+          "name": "lastUpdated",
+          "type": "string"
+        },
+        {
+          "name": "baseUrl",
+          "description": "Base URL of the Requirements Bazaar instance to work with.",
+          "type": "string",
+          "default": "\"https://requirements-bazaar.org/bazaar/\""
+        },
+        {
+          "name": "requirementId",
+          "type": "number",
+          "default": "2338"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "creator",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "comments",
+          "type": "array",
+          "default": "[]"
+        }
+      ],
+      "properties": [
+        {
+          "name": "lastUpdated",
+          "attribute": "lastUpdated",
+          "type": "string"
+        },
+        {
+          "name": "baseUrl",
+          "attribute": "baseUrl",
+          "description": "Base URL of the Requirements Bazaar instance to work with.",
+          "type": "string",
+          "default": "\"https://requirements-bazaar.org/bazaar/\""
+        },
+        {
+          "name": "requirementId",
+          "attribute": "requirementId",
+          "type": "number",
+          "default": "2338"
+        },
+        {
+          "name": "name",
+          "attribute": "name",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "description",
+          "attribute": "description",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "creator",
+          "attribute": "creator",
+          "type": "string",
+          "default": "\"\""
+        },
+        {
+          "name": "comments",
+          "attribute": "comments",
+          "type": "array",
+          "default": "[]"
         }
       ]
     }
