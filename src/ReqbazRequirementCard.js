@@ -53,6 +53,11 @@ export class ReqbazRequirementCard extends LitElement {
 
   static get properties() {
     return {
+      /**
+       * Base URL of the Requirements Bazaar instance to work with.
+       */
+      baseUrl: { type: String },
+      requirementId: { type: Number },
       name: { type: String },
       description: { type: String },
       lastUpdated: { type: String },
@@ -63,10 +68,11 @@ export class ReqbazRequirementCard extends LitElement {
 
   constructor() {
     super();
-    this.name = 'Flag inappropriate requirements';
-    this.description =
-      'Users should be able to flag requirements as inappropriate, e.g., if fake news are spread. The project creator/maintainer could then resolve the issue.';
-    this.creator = 'istvank';
+    this.baseUrl = 'https://requirements-bazaar.org/bazaar/';
+    this.requirementId = 2338;
+    this.name = '';
+    this.description = '';
+    this.creator = '';
     this.comments = [];
   }
 
@@ -88,5 +94,35 @@ export class ReqbazRequirementCard extends LitElement {
         </div>
       </div>
     `;
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+
+    // the fetch is anyway called when the property changes
+    // this.fetchRequirement();
+  }
+
+  updated(changedProperties) {
+    changedProperties.forEach((oldValue, propName) => {
+      if (propName === 'requirementId') {
+        this.fetchRequirement();
+      }
+    });
+  }
+
+  async fetchRequirement() {
+    const url = `${this.baseUrl}requirements/${this.requirementId}`;
+    const response = await fetch(url);
+    const jsonResponse = await response.json();
+
+    // update properties
+    this._populateProperties(jsonResponse);
+  }
+
+  _populateProperties(requirementJson) {
+    this.name = requirementJson.name;
+    this.description = requirementJson.description;
+    this.creator = requirementJson.creator.userName;
   }
 }
