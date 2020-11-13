@@ -12,6 +12,27 @@ export class ReqbazCommentsThread extends LitElement {
       :host {
         display: block;
         width: 100%;
+
+        overflow-y: auto;
+        word-break: break-word;
+        word-wrap: break-word;
+
+        --font-size--small: calc((14 / 16) * 1rem); /* 14px */
+        --font-size--default: calc((16 / 16) * 1rem); /* 16px */
+        --font-size--large: calc((24 / 16) * 1rem); /* 24px */
+      }
+
+      .comment {
+        margin-top: 5px;
+      }
+
+      .author {
+        font-size: var(--font-size--small);
+        color: #90949c;
+      }
+
+      .reply {
+        margin-left: 40px;
       }
     `;
   }
@@ -30,15 +51,24 @@ export class ReqbazCommentsThread extends LitElement {
   constructor() {
     super();
     this.baseUrl = 'https://requirements-bazaar.org/bazaar/';
-    this.requirementId = 2338;
+    this.requirementId = 1187;
     this.comments = [];
   }
 
   render() {
+    if (this.comments.length === 0) {
+      return html`
+        No comments yet...
+      `;
+    }
+
     return html`
       ${this.comments.map(
         comment => html`
-          <div>${comment.message}</div>
+          <div class="comment ${comment.replyToComment ? 'reply' : ''}">
+            <div>${comment.message}</div>
+            <div class="author">${comment.creationDate} by ${comment.creator.userName}</div>
+          </div>
         `,
       )}
     `;
