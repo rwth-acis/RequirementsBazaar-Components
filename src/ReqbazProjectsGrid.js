@@ -1,4 +1,4 @@
-import { html, css, LitElement } from 'lit-element';
+import { html, css, LitElement } from 'lit';
 import '@appnest/masonry-layout';
 import '../reqbaz-project-card.js';
 

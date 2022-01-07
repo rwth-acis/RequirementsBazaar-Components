@@ -1,4 +1,4 @@
-import { html, css, LitElement } from 'lit-element';
+import { html, css, LitElement } from 'lit';
 import '../reqbaz-comments-thread.js';
 import dayjs from 'dayjs/esm/index.js';
 import relativeTime from 'dayjs/esm/plugin/relativeTime/index.js';

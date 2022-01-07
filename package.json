@@ -1,6 +1,6 @@
 {
   "name": "reqbaz-components",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "Requirements Bazaar Web Components",
   "author": "István Koren",
   "license": "MIT",
@@ -36,9 +36,8 @@
   },
   "dependencies": {
     "@appnest/masonry-layout": "^2.0.8",
-    "dayjs": "^1.9.6",
-    "lit-element": "^2.4.0",
-    "lit-html": "^1.3.0"
+    "dayjs": "^1.10.7",
+    "lit": "^2.0.2"
   },
   "devDependencies": {
     "@open-wc/demoing-storybook": "^2.4.7",
@@ -46,7 +45,7 @@
     "@open-wc/prettier-config": "^0.1.10",
     "@open-wc/testing": "^2.5.32",
     "@open-wc/testing-karma": "^3.4.8",
-    "@web/dev-server": "^0.0.14",
+    "@web/dev-server": "^0.1.28",
     "deepmerge": "^3.2.0",
     "eslint": "^6.1.0",
     "husky": "^1.0.0",
