@@ -4,6 +4,10 @@ addParameters({
   docs: {
     iframeHeight: '200px',
   },
+  backgrounds: [
+    { name: 'gray', value: '#f5f5f5', default: true },
+    { name: 'white', value: '#ffffff' },
+  ],
 });
 
 async function run() {

@@ -1,5 +1,8 @@
 import { html, css, LitElement } from 'lit-element';
 import '../reqbaz-comments-thread.js';
+import dayjs from 'dayjs/esm/index.js';
+import relativeTime from 'dayjs/esm/plugin/relativeTime/index.js';
+import localizedFormat from 'dayjs/esm/plugin/localizedFormat/index.js';
 import { starIcon } from './reqbaz-icons.js';
 
 /**
@@ -21,6 +24,7 @@ export class ReqbazRequirementCard extends LitElement {
         border-radius: 8px;
         box-shadow: 0 1px 2px lightgrey;
         font-family: system-ui;
+        background-color: white;
       }
 
       #container {
@@ -54,6 +58,10 @@ export class ReqbazRequirementCard extends LitElement {
         color: #5d5d5d;
       }
 
+      #description {
+        margin-top: 8px;
+      }
+
       .subtitle {
         font-weight: bold;
       }
@@ -70,7 +78,7 @@ export class ReqbazRequirementCard extends LitElement {
         flex: 1;
         margin: 5px;
         border-radius: 6px;
-        background: #d3d3d3;
+        background-color: #f3f3f3;
         cursor: pointer;
         align-items: center;
         justify-content: center;
@@ -118,6 +126,11 @@ export class ReqbazRequirementCard extends LitElement {
     this.numberOfComments = 0;
     this.numberOfFollowers = 0;
     this.numberOfAttachments = 0;
+
+    this._commentsVisible = false;
+
+    dayjs.extend(relativeTime);
+    dayjs.extend(localizedFormat);
   }
 
   render() {
@@ -128,21 +141,26 @@ export class ReqbazRequirementCard extends LitElement {
           <div id="name">${this.name}</div>
           <div class="icon">${starIcon}</div>
         </div>
-        <div id="lastUpdated">${this.creationDate} by ${this.creator}</div>
+        <div id="lastUpdated" title=${dayjs(this.creationDate).format('LLL')}>${dayjs(this.creationDate).fromNow()} by ${this.creator}</div>
         <div id="description">${this.description}</div>
 
         <div class="line"></div>
 
         <div id="actionButtons">
-          <div id="followersButton" class="button">${this.numberOfFollowers} Followers</div>
-          <div id="commentsButton" class="button">${this.numberOfComments} Comments</div>
-          <div id="attachmentsButton" class="button">${this.numberOfAttachments} Attachments</div>
+          <div id="upvoteButton" class="button">Vote</div>
+          <div id="commentsButton" class="button" @click="${this._handleCommentsButtonClick}">${this.numberOfComments} Comments</div>
+          <div id="followersButton" class="button">${this.numberOfFollowers} Follow</div>
+          <!--<div id="attachmentsButton" class="button">${this.numberOfAttachments} Attachments</div>-->
+          <div id="shareButton" class="button">Share</div>
         </div>
 
-        <div id="comments">
-          <div class="subtitle">Comments</div>
-          <reqbaz-comments-thread requirementId=${this.requirementId}></reqbaz-comments-thread>
-        </div>
+        ${this._commentsVisible?
+          html`
+            <div id="comments">
+              <div class="subtitle">Comments</div>
+              <reqbaz-comments-thread requirementId=${this.requirementId}></reqbaz-comments-thread>
+            </div>
+          `: html``}
       </div>
     `;
   }
@@ -180,4 +198,10 @@ export class ReqbazRequirementCard extends LitElement {
     this.numberOfFollowers = requirementJson.numberOfFollowers;
     this.numberOfAttachments = requirementJson.numberOfAttachments;
   }
+
+  _handleCommentsButtonClick() {
+    this._commentsVisible = !this._commentsVisible;
+    this.requestUpdate();
+  }
+
 }

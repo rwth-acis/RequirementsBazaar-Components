@@ -1,5 +1,5 @@
 ```js script
-import { html, withKnobs, withWebComponentsKnobs } from '@open-wc/demoing-storybook';
+import { html, withKnobs, withWebComponentsKnobs} from '@open-wc/demoing-storybook';
 import '../reqbaz-requirement-card.js';
 
 export default {
