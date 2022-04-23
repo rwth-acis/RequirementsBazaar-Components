@@ -1,6 +1,12 @@
 import { html, css, LitElement } from 'lit';
 import '@appnest/masonry-layout';
 
+/**
+ * Here is a description of my web component.
+ *
+ * @element reqbaz-requirements-grid
+ *
+ */
 export class ReqbazRequirementsGrid extends LitElement {
   static get styles() {
     return css`

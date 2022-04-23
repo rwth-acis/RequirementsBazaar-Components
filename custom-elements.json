@@ -381,6 +381,68 @@
           "default": "0"
         }
       ]
+    },
+    {
+      "name": "reqbaz-requirements-grid",
+      "path": "./src/ReqbazRequirementsGrid.js",
+      "description": "Here is a description of my web component.",
+      "attributes": [
+        {
+          "name": "loading",
+          "type": "boolean"
+        },
+        {
+          "name": "category",
+          "type": "number"
+        },
+        {
+          "name": "baseUrl",
+          "description": "Base URL of the Requirements Bazaar instance to work with.",
+          "type": "string",
+          "default": "\"https://requirements-bazaar.org/bazaar/\""
+        },
+        {
+          "name": "requirements",
+          "type": "array",
+          "default": "[]"
+        },
+        {
+          "name": "perPage",
+          "type": "number",
+          "default": "10"
+        }
+      ],
+      "properties": [
+        {
+          "name": "loading",
+          "attribute": "loading",
+          "type": "boolean"
+        },
+        {
+          "name": "category",
+          "attribute": "category",
+          "type": "number"
+        },
+        {
+          "name": "baseUrl",
+          "attribute": "baseUrl",
+          "description": "Base URL of the Requirements Bazaar instance to work with.",
+          "type": "string",
+          "default": "\"https://requirements-bazaar.org/bazaar/\""
+        },
+        {
+          "name": "requirements",
+          "attribute": "requirements",
+          "type": "array",
+          "default": "[]"
+        },
+        {
+          "name": "perPage",
+          "attribute": "perPage",
+          "type": "number",
+          "default": "10"
+        }
+      ]
     }
   ]
 }

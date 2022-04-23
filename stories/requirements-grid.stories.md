@@ -1,10 +1,11 @@
 ```js script
-import { html } from '@open-wc/demoing-storybook';
+import { html, withKnobs, withWebComponentsKnobs } from '@open-wc/demoing-storybook';
 import '../reqbaz-requirements-grid.js';
 
 export default {
   title: 'ReqbazRequirementsGrid',
   component: 'reqbaz-requirements-grid',
+  decorators: [withKnobs, withWebComponentsKnobs],
   options: { selectedPanel: "storybookjs/knobs/panel" },
 };
 ```
