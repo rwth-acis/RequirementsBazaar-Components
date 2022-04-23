@@ -1,10 +1,11 @@
 ```js script
-import { html } from '@open-wc/demoing-storybook';
+import { html, withKnobs, withWebComponentsKnobs } from '@open-wc/demoing-storybook';
 import '../reqbaz-category-card.js';
 
 export default {
   title: 'ReqbazCategoryCard',
   component: 'reqbaz-category-card',
+  decorators: [withKnobs, withWebComponentsKnobs],
   options: { selectedPanel: "storybookjs/knobs/panel" },
 };
 ```
