@@ -1,5 +1,10 @@
 import { html, css, LitElement } from 'lit';
 
+/**
+ * 
+ * @element reqbaz-category-card
+ *
+ */
 export class ReqbazCategoryCard extends LitElement {
   static get styles() {
     return css`

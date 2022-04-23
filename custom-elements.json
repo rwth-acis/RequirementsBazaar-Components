@@ -46,6 +46,45 @@
       ]
     },
     {
+      "name": "reqbaz-category-card",
+      "path": "./src/ReqbazCategoryCard.js",
+      "attributes": [
+        {
+          "name": "categoryId",
+          "type": "number"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "default": "\"Frontend\""
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "\"Post your requirements for the Requirements Bazaar Web app under this category.\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "categoryId",
+          "attribute": "categoryId",
+          "type": "number"
+        },
+        {
+          "name": "name",
+          "attribute": "name",
+          "type": "string",
+          "default": "\"Frontend\""
+        },
+        {
+          "name": "description",
+          "attribute": "description",
+          "type": "string",
+          "default": "\"Post your requirements for the Requirements Bazaar Web app under this category.\""
+        }
+      ]
+    },
+    {
       "name": "reqbaz-comments-thread",
       "path": "./src/ReqbazCommentsThread.js",
       "description": "Here is a description of my web component.",
@@ -59,7 +98,7 @@
         {
           "name": "requirementId",
           "type": "number",
-          "default": "2338"
+          "default": "1187"
         },
         {
           "name": "comments",
@@ -79,7 +118,7 @@
           "name": "requirementId",
           "attribute": "requirementId",
           "type": "number",
-          "default": "2338"
+          "default": "1187"
         },
         {
           "name": "comments",
@@ -221,6 +260,10 @@
       "description": "Here is a description of my web component.",
       "attributes": [
         {
+          "name": "creationDate",
+          "type": "string"
+        },
+        {
           "name": "lastUpdated",
           "type": "string"
         },
@@ -233,7 +276,7 @@
         {
           "name": "requirementId",
           "type": "number",
-          "default": "2338"
+          "default": "2337"
         },
         {
           "name": "name",
@@ -254,9 +297,29 @@
           "name": "comments",
           "type": "array",
           "default": "[]"
+        },
+        {
+          "name": "numberOfComments",
+          "type": "number",
+          "default": "0"
+        },
+        {
+          "name": "numberOfFollowers",
+          "type": "number",
+          "default": "0"
+        },
+        {
+          "name": "numberOfAttachments",
+          "type": "number",
+          "default": "0"
         }
       ],
       "properties": [
+        {
+          "name": "creationDate",
+          "attribute": "creationDate",
+          "type": "string"
+        },
         {
           "name": "lastUpdated",
           "attribute": "lastUpdated",
@@ -273,7 +336,7 @@
           "name": "requirementId",
           "attribute": "requirementId",
           "type": "number",
-          "default": "2338"
+          "default": "2337"
         },
         {
           "name": "name",
@@ -298,6 +361,24 @@
           "attribute": "comments",
           "type": "array",
           "default": "[]"
+        },
+        {
+          "name": "numberOfComments",
+          "attribute": "numberOfComments",
+          "type": "number",
+          "default": "0"
+        },
+        {
+          "name": "numberOfFollowers",
+          "attribute": "numberOfFollowers",
+          "type": "number",
+          "default": "0"
+        },
+        {
+          "name": "numberOfAttachments",
+          "attribute": "numberOfAttachments",
+          "type": "number",
+          "default": "0"
         }
       ]
     }
