@@ -11,6 +11,10 @@
 <body>
   <div id="demo"></div>
 
+  <div style="padding-bottom: 50px;"></div>
+
+  <div id="requirementGridDemo"></div>
+
   <script type="module">
     import { html, render } from 'lit-html';
     import '../reqbaz-requirement-card.js';
@@ -21,6 +25,21 @@
         </reqbaz-requirement-card>
       `,
       document.querySelector('#demo')
+    );
+  </script>
+
+  <script type="module">
+    import { html, render } from 'lit-html';
+    import '../reqbaz-requirements-grid.js';
+
+    render(
+      html`
+        <reqbaz-requirements-grid
+          category="143"
+          >
+        </reqbaz-requirements-grid>
+      `,
+      document.querySelector('#requirementGridDemo')
     );
   </script>
 </body>
