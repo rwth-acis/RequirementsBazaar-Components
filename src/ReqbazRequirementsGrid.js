@@ -84,7 +84,7 @@ export class ReqbazRequirementsGrid extends LitElement {
           ${this.requirements.map(
             requirement => html`
               <a
-                href="https://requirements-bazaar.org/projects/2/categories/2/requirements/${requirement.id}"
+                href="https://requirements-bazaar.org/projects/2/requirements/${requirement.id}"
                 target="_blank"
               >
                 <div class="card">
