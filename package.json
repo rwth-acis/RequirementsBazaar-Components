@@ -44,7 +44,7 @@
     "@open-wc/eslint-config": "^2.1.0",
     "@open-wc/prettier-config": "^0.1.10",
     "@open-wc/testing": "^2.5.32",
-    "@open-wc/testing-karma": "^3.4.8",
+    "@open-wc/testing-karma": "^4.0.9",
     "@web/dev-server": "^0.1.28",
     "deepmerge": "^3.2.0",
     "eslint": "^6.1.0",
